@@ -15,11 +15,11 @@ if __name__ == '__main__':
 
     tabela_start.replace(to_replace='_', value=np.nan, inplace=True)
     GZ_AVG = (tabela_start['GZ_21'].astype(float) + tabela_start['GZ_20'].astype(float) + tabela_start['GZ_19'].astype(float)) / 3
-    tabela_start.fillna(value=GZ_AVG.mean(), inplace = True)
+    tabela_start.fillna(value=GZ_AVG.min(), inplace = True)
 
     tabela_start.replace(to_replace='-', value=np.nan, inplace=True)
     GS_AVG = (tabela_start['GS_21'].astype(float) + tabela_start['GS_20'].astype(float) + tabela_start['GS_19'].astype(float)) / 3
-    tabela_start.fillna(value=GS_AVG.mean(), inplace = True)
+    tabela_start.fillna(value=GS_AVG.max(), inplace = True)
 
     tabela_start.replace(to_replace='*', value=np.nan, inplace=True)
     PKT_AVG = (tabela_start['PKT_21'].astype(float) + tabela_start['PKT_20'].astype(float) + tabela_start['PKT_19'].astype(float)) / 3
@@ -60,7 +60,7 @@ if __name__ == '__main__':
     #SZACOWANIE WYNIKÓW W NOWYM SEZONIE:
     koncowa_tabela = pd.DataFrame(dane['CLUB'])
     koncowa_tabela['GZ'] = round(nowa_tabela['ST_POWER'] * GZ_AVG)
-    koncowa_tabela['GC'] = round(nowa_tabela['DEF_POWER'] * GS_AVG)
+    koncowa_tabela['GC'] = round((1/nowa_tabela['DEF_POWER']) * GS_AVG)
     koncowa_tabela['BG'] = koncowa_tabela['GZ'] - koncowa_tabela['GC']
     koncowa_tabela['PKT'] = round(nowa_tabela['POWER'] * PKT_AVG)
     koncowa_tabela = koncowa_tabela.sort_values(['PKT', 'BG', 'GZ'], ascending=False)
